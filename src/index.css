@@ -1,0 +1,536 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: radial-gradient(#444, #222);
+    color: #d7d7d7;
+}
+
+/* Nav */
+
+nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: rgb(53, 53, 151);
+    z-index: 95;
+    padding: 1rem;
+}
+
+nav.library {
+    left: 0;
+    right: unset;
+    background-color: rgb(42, 42, 83);
+    color: #fff;
+}
+
+/* Main */
+
+#root > .content {
+    perspective: 100px;
+}
+
+#root > .content > main {
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 100px;
+    padding-top: 6dvh;
+}
+
+/* Diagram */
+.diagram {
+    background-color: hsl(100, 59%, 72%);
+    height: 65dvh;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateZ(0);
+    scale: -1 1;
+}
+
+.clockWise {
+    width: 4dvh;
+    height: 1dvh;
+    border-radius: 15%;
+    background-color: rgb(195, 195, 195);
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    translate: 50% -50%;
+    transform: translate(calc(31dvh + 50%), 0);
+    rotate: -90deg;
+    z-index: 2;
+    box-shadow: 0 0 10px 5px rgb(0, 0, 0);
+    transition: rotate 1s ease-in-out;
+}
+
+.innerDiaText {
+    color: #444;
+    font-size: 2rem;
+    text-align: center;
+    scale: -1 1;
+}
+
+.clockLabel {
+    width: 1.75dvh;
+    height: 0.75dvh;
+    border-radius: 15%;
+    background-color: #89898900;
+    box-shadow: 0 0 10px 0.5px rgb(255, 255, 255);
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    translate: 50% -50%;
+    transform: translate(calc(36dvh + 50%), 0);
+}
+
+.titleTasks {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    scale: -1 -1;
+}
+
+.titleTasks div {
+    position: absolute;
+    translate: -50% -50%;
+    transform: translate(46dvh, 0);
+}
+.titleTasks p {
+    scale: -1 1;
+    font-size: 2rem;
+    width: 14vw;
+    text-align: center;
+    font-weight: bold;
+    word-break: break-all;
+    -webkit-text-stroke: 0.6px #444;
+    z-index: 12;
+}
+
+.dataDaigram {
+    padding-left: 15vw;
+    font-size: 1.8rem;
+    max-width: 38vw;
+    counter-reset: section;
+    display: flex;
+    flex-direction: column;
+    gap: 2dvh;
+}
+
+.dataTime h2::before {
+    counter-increment: section;
+    content: counter(section) ": ";
+}
+
+.dataDaigram .descriptionDia {
+    font-size: 1.3rem;
+    opacity: 0.65;
+}
+
+/* View Window */
+.viewWindow {
+    backdrop-filter: blur(10px);
+    background-color: rgba(29, 29, 29, 0.8);
+    position: fixed;
+    top: 6dvh;
+    left: 50%;
+    translate: -50% 0%;
+    padding: 35px;
+    font-size: 35px;
+    border-radius: 24px;
+    transform: translateZ(calc(800 * -100px));
+    transition: transform 0.4s cubic-bezier(0, 1, 0, 1);
+    z-index: 90;
+    max-height: 90dvh;
+    overflow-y: auto;
+}
+
+.viewWindow::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 2px transparent;
+}
+
+.viewWindow::-webkit-scrollbar {
+    width: 4px;
+}
+
+.viewWindow::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    background-color: rgba(197, 197, 197, 0.5);
+}
+
+.viewWindow > button {
+    position: absolute;
+    z-index: 1000;
+    right: 15px;
+    top: 15px;
+}
+
+.viewWindow.open {
+    transform: translateZ(0);
+}
+
+.viewWindow h2 {
+    font-size: 2.75rem;
+}
+
+.counts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.counts .count {
+    display: grid;
+    grid-template-columns: 260px 34px 80px 1fr;
+    align-items: center;
+    gap: 6px 12px;
+}
+
+.counts .count .color {
+    background-color: red;
+    border: #fff solid 2px;
+    border-radius: 12px;
+    aspect-ratio: 1/1;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    z-index: 91;
+}
+
+.counts .count span:has(.color) {
+    position: relative;
+}
+
+.counts .count .color + .opendedColors {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    background-color: #727272b3;
+    padding: 4px;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 24px);
+    gap: 3px;
+    scale: 0.5;
+    opacity: 0;
+    transition: all 0.2s;
+    z-index: 90;
+}
+.counts .count .color + .opendedColors div {
+    aspect-ratio: 1/1;
+    border-radius: 6px;
+    border: #fff 1px solid;
+}
+
+.counts .count .color:checked + .opendedColors {
+    opacity: 1;
+    scale: 1;
+    top: -140%;
+    z-index: 92;
+}
+
+.counts .count > span {
+    display: flex;
+    justify-content: start;
+    font-size: 1.5rem;
+}
+.counts .count > span input {
+    width: 2rem;
+}
+
+.counts .count input {
+    background-color: transparent;
+    box-shadow: none;
+    color: #fff;
+    border-color: transparent;
+    font-size: 1.5rem;
+}
+.counts .count input:focus,
+.counts .count textarea:focus {
+    outline: none;
+}
+
+.counts .count > input:first-child {
+    font-size: 2.25rem;
+}
+
+.counts .count .description {
+    grid-column: 1 / span 4;
+}
+.counts .count .description textarea {
+    min-height: 2rem;
+    max-width: calc(40vh / 9 * 16);
+    background-color: transparent;
+    color: #fff;
+    font-size: 1.125rem;
+    border: none;
+    max-height: 3.6em;
+}
+
+.viewWindow .settings {
+    display: flex;
+    gap: 12px;
+}
+
+.viewWindow .settings button {
+    background-color: #2b65e3;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    transition: scale 0.2s;
+}
+
+.viewWindow .settings button:hover {
+    scale: 1.05;
+}
+
+.viewWindow .settings button.startTimer {
+    background-color: #2fcb70;
+}
+.viewWindow .settings button.resetetTimer {
+    background-color: #e36e2b;
+}
+
+.viewWindow .settings button.autoTimer {
+    background-color: #932be3;
+    z-index: 91;
+}
+
+.autoBlockTime {
+    display: flex;
+    position: relative;
+}
+
+.viewWindow .settings time {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    background-color: #727272b3;
+    padding: 8px;
+    border-radius: 8px;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    scale: 0.5;
+    opacity: 0;
+    transition: all 0.4s;
+}
+.viewWindow .settings time span {
+    display: flex;
+    align-items: baseline;
+    color: #fff;
+    gap: 3px;
+}
+.viewWindow .settings time input {
+    font-size: 1.5rem;
+    width: 1.8rem;
+    height: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    overflow: hidden;
+    text-align: end;
+}
+
+.viewWindow .settings .open + time {
+    top: -80%;
+    opacity: 1;
+    scale: 1;
+}
+.viewWindow .settings time input::-webkit-outer-spin-button,
+.viewWindow .settings time input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.viewWindow .settings time input:focus {
+    outline: none;
+}
+
+.hamburger {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    text-align: end;
+}
+.hamburger .hamburger-box {
+    display: inline-block;
+    height: 30px;
+    position: relative;
+    width: 30px;
+}
+.hamburger .hamburger-box .hamburger-inner {
+    background-color: #2b4ce3;
+    border-radius: 4px;
+    display: block;
+    height: 4px;
+    margin-top: -2px;
+    position: absolute;
+    top: 8px;
+    transform: translate3d(0, 10px, 0) rotate(45deg);
+    width: 30px;
+}
+.hamburger .hamburger-box .hamburger-inner:after {
+    background: #4062ff;
+    border-radius: 4px;
+    bottom: -10px;
+    content: "";
+    display: block;
+    height: 4px;
+    position: absolute;
+    top: 20px;
+    transform: translate3d(0, -20px, 0) rotate(-90deg);
+    width: 30px;
+}
+
+/* Library */
+
+.libraryWin {
+    top: 2px;
+    position: fixed;
+    backdrop-filter: blur(10px);
+    background-color: rgba(29, 29, 29, 0.6);
+    padding: 8px 18px 18px;
+    border-radius: 0 12px 12px 0;
+    z-index: 96;
+    translate: -100% 0;
+    opacity: 0;
+    transition: all 0.4s;
+    overflow-y: auto;
+    max-height: 98dvh;
+}
+
+.vilibraryWinewWindow::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 2px transparent;
+}
+
+.libraryWin::-webkit-scrollbar {
+    width: 4px;
+}
+
+.libraryWin::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    background-color: rgba(197, 197, 197, 0.5);
+}
+
+.libraryWin.open {
+    translate: 0 0;
+    opacity: 1;
+}
+
+.libraryWin > button {
+    margin-bottom: 12px;
+}
+
+.libraryWin .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.libraryWin .header span {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.libContent {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.libContent .taskSet {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    background-color: #303030;
+    padding: 8px 12px;
+    border-radius: 4px;
+    align-items: center;
+}
+
+.libContent .taskSet > textarea {
+    max-width: 180px;
+    min-height: 4.25rem;
+    max-height: 110px;
+    padding-inline: 0.5rem 2rem;
+    font-size: 1.25rem;
+    color: #fff;
+    background: none;
+    border: none;
+}
+
+.libContent .titlesTask {
+    display: flex;
+    flex-direction: row;
+    max-width: 220px;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+}
+
+.libContent .data-task {
+    display: flex;
+    align-items: center;
+    gap: 0 12px;
+    grid-column: 1 / span 3;
+    margin-top: 2px;
+}
+
+.libContent .data-task button {
+    background-color: #2b4ce385;
+    border: none;
+    padding: 4px 8px;
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+.libContent .data-task button.deledeSet {
+    background-color: #e3432b85;
+}
+
+.libContent .data-task i {
+    display: flex;
+    align-items: center;
+}
+
+.libContent .data-task i img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(286deg)
+        brightness(102%) contrast(101%);
+}
+
+.libContent .titlesTask div {
+    background-color: #424242;
+    padding: 4px;
+    border-radius: 6px;
+}
+
+.libraryWin .buttons {
+    margin-top: 24px;
+}
+
+.libraryWin .buttons button {
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+    background-color: #2fcb70;
+}
